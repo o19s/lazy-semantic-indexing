@@ -2,9 +2,9 @@
 
 This code creates a convenient way to experiment with latent semantic indexing on top of some proved C numerical libraries. You'll need to go through a few extra steps to get these libraries installed locally:
 
-1. Install system prereqs for [SciPy](http://www.scipy.org/install.html)
-
-2. Install prereqs into pyvenv
+1. Run Elasticsearch
+2. Install system prereqs for [SciPy](http://www.scipy.org/install.html)
+3. Install prereqs into pyvenv
 
 ```bash
 pyvenv venv
