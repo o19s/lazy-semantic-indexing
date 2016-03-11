@@ -40,7 +40,10 @@ class StringIndexDict(object):
 
 
 
-class TermDocCollection(object):
+class Index(object):
+    """ SemanticIndex represents the results of the SVD operation over
+        a term-document matrix
+    """
     def __init__(self,source=None,numTopics=10):
         self._docDict = StringIndexDict()
         self._termDict = StringIndexDict()
