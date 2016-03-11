@@ -8,7 +8,7 @@ This code creates a convenient way to experiment with latent semantic indexing o
 
 ```bash
 pyvenv venv
-source ven/bin/activate
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
@@ -17,7 +17,7 @@ pip install -r requirements.txt
 ```bash
 python createStackExchange.py
 python indexStackExchange.py
-python stackexchange.py
+python semanterize.py 'Title.bigramed'
 ```
 
 # Play!
