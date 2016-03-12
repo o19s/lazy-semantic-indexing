@@ -6,10 +6,11 @@ def scoredFingerprint(terms):
 
     fp = {}
     for term, value in terms.items():
-        if '_' in term:
-            continue
-        if value[1] < 100 or term in keepwords:
-            fp[term] = (1.0)  #float(value['term_freq']) / float(value['doc_freq'])
+        #fp[term] = 1.0
+        #if '_' in term:
+        #    continue
+        #if value[1] < 100 or term in keepwords:
+        fp[term] = (1.0) / value[1]  #float(value['term_freq']) / float(value['doc_freq'])
         #else:
         #    print("Ommitting %s" % term)
     return fp
@@ -46,7 +47,7 @@ def buildStackexchange(field='Body.bigramed', numTopics=50, sampleEvery=1):
 
     tdc = Index(scoredTvs(tvs, sampleEvery=sampleEvery), numTopics=numTopics)
     print(tdc.getTermvector('11336'))
-    blurred = tdc.getBlurredTerms('11336')
+    blurred = tdc.getBlurredTerms('11336',stops=4)
     print(blurred[1][:10])
 
     return tdc

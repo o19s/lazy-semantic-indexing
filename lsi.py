@@ -45,6 +45,8 @@ class Index(object):
         a term-document matrix
     """
     def __init__(self,source=None,numTopics=10):
+        # Source is a list of tuples, first element being docId,
+        # second element the term vector (why isn't this a dict?)
         self._docDict = StringIndexDict()
         self._termDict = StringIndexDict()
         self._termVectors = []
@@ -84,6 +86,11 @@ class Index(object):
         data = numpy.asarray(data)
         indices = numpy.asarray(indices)
         # compressed sparse column matrix
+        # Rows terms, column docs
+        #
+        #        doc1   doc2   doc3
+        # 'the'    1      1     1
+        # 'cat'    1      0     2
         self._cscMatrix = scipy.sparse.csc_matrix((data, indices, indptr),
                 shape=(self.numTerms, self.numDocs))
         return self._cscMatrix
@@ -127,7 +134,7 @@ class Index(object):
         blurredField = numpy.dot(uPrime,v[:,doc])
         tokenStrengths = numpy.where(blurredField > cutoff, blurredField, 0)
         tokens = [(self._termDict[termId], strength) for (termId, strength) in enumerate(tokenStrengths)]
-        tokens.sort(key=lambda x: x[1], reverse=True)
+        tokens.sort(key=lambda x: abs(x[1]), reverse=True)
 
         return (self._docDict[doc], tokens)
 
@@ -145,15 +152,19 @@ class Index(object):
         self._uStripped = uStripped
         return uStripped
 
-    def getTopic(self,topicNum,cutoff,stripped=True):
+    def getTopic(self,topicNum,cutoff=0,stripped=False):
         if stripped:
-            u = self._getStrippedUprime()
+            uPrime = self._getStrippedUprime()
         else:
-            u = self._getUprime()
+            uPrime = self._getUprime()
 
-        return  [self._termDict[i]
-                    for i in numpy.where(u.T[topicNum]>cutoff)[0]
-                ]
+        uPrimeTopic = uPrime.T[topicNum]
+
+        topicTermByStr = [(self._termDict[i], uPrimeTopic[i])
+                           for i in numpy.where(uPrimeTopic>cutoff)[0]
+                          ]
+        topicTermByStr.sort(key=lambda x: abs(x[1]), reverse=True)
+        return topicTermByStr
 
     def getRelatedTerms(self,token,numTerms,tokens_only=True):
         uP = self._getUprime()
