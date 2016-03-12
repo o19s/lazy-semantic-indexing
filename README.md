@@ -3,7 +3,7 @@
 This code creates a convenient way to experiment with latent semantic indexing on top of some proved C numerical libraries. You'll need to go through a few extra steps to get these libraries installed locally:
 
 1. Run Elasticsearch
-2. Install system prereqs for [SciPy](http://www.scipy.org/install.html)
+2. Install system prereqs for [NumPy](http://stackoverflow.com/a/20497608/8123) -- be sure to get gfortran installed!
 3. Install prereqs into pyvenv
 
 ```bash
