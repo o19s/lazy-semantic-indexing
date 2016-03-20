@@ -134,7 +134,7 @@ class Index(object):
         blurredField = numpy.dot(uPrime,v[:,doc])
         tokenStrengths = numpy.where(blurredField > cutoff, blurredField, 0)
         tokens = [(self._termDict[termId], strength) for (termId, strength) in enumerate(tokenStrengths)]
-        tokens.sort(key=lambda x: abs(x[1]), reverse=True)
+        tokens.sort(key=lambda x: (x[1]), reverse=True)
 
         return (self._docDict[doc], tokens)
 
@@ -163,7 +163,7 @@ class Index(object):
         topicTermByStr = [(self._termDict[i], uPrimeTopic[i])
                            for i in numpy.where(uPrimeTopic>cutoff)[0]
                           ]
-        topicTermByStr.sort(key=lambda x: abs(x[1]), reverse=True)
+        topicTermByStr.sort(key=lambda x: (x[1]), reverse=True)
         return topicTermByStr
 
     def getRelatedTerms(self,token,numTerms,tokens_only=True):
