@@ -42,13 +42,13 @@ def groupEveryN(l, n=10):
         yield l[i:i+n]
 
 
-def termVectors(es, docIds, field='Body.bigramed'):
+def termVectors(es, docIds, field='Body.bigramed', index='stackexchange'):
     """ Returns term vectors for corpus one doc at a time
         for each docid yields the format:
         (docId1, {term1: (tf, df), term2: (tf, df)...})"""
     i = n = 100
     for docIdGroup in groupEveryN(docIds, n=n):
-        for tv in _termVectorBatch(es, docIds=docIdGroup, field=field):
+        for tv in _termVectorBatch(es, docIds=docIdGroup, field=field, index=index):
             yield tv
         print("Fetched %s termvectors" % i)
         i += n

@@ -15,13 +15,13 @@ analyzers = {
         "nerd_text": {
             "char_filter": ["html_strip"],
             "tokenizer": "standard",
-            "filter": ["lowercase", "stop", "snowball"],
+            "filter": ["lowercase", "stop", "asciifolding", "min_stemmer", "snowball"],
             "stopwords": "_english_"
         },
         "nerd_bigrams": {
             "char_filter": ["html_strip"],
             "tokenizer": "standard",
-            "filter": ["lowercase",  "stop", "min_stemmer", "bigram_filter"],
+            "filter": ["lowercase",  "stop", "asciifolding", "min_stemmer", "bigram_filter"],
             "stopwords": "_english_"
         }
     }
@@ -71,5 +71,11 @@ try:
     es = Elasticsearch("http://localhost:9200")
     es.indices.delete(index='stackexchange', ignore=[400,404])
     es.indices.create(index='stackexchange', body=settings)
+    es.indices.delete(index='stackexchange_munged', ignore=[400,404])
+    es.indices.create(index='stackexchange_munged', body=settings)
+    es.indices.delete(index='stackexchange_rand', ignore=[400,404])
+    es.indices.create(index='stackexchange_rand', body=settings)
+    es.indices.delete(index='stackexchange_grams', ignore=[400,404])
+    es.indices.create(index='stackexchange_grams', body=settings)
 except TransportError as e:
     print(repr(e))

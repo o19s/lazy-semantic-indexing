@@ -114,6 +114,14 @@ class Index(object):
         self._uPrime = numpy.dot(u.T,numpy.diag(s))
         return self._uPrime
 
+    def _getVprime(self, drops=0):
+        u,s,v = self._getSvd()
+        for drop in range(drops):
+            s[-drop] = 0
+        self._vPrime = numpy.dot(numpy.diag(s), v)
+        return self._vPrime
+
+
     def getTermvector(self,docId):
         """ Get the initial term vector for docid doc"""
         print("TV for %s" % docId)
@@ -165,6 +173,17 @@ class Index(object):
                           ]
         topicTermByStr.sort(key=lambda x: (x[1]), reverse=True)
         return topicTermByStr
+
+    def getTopicDocs(self, topicNum, cutoff=0):
+        # v is the doc-genre affinities
+        vPrime = self._getVprime()
+        vPrimeTopic = vPrime[topicNum]
+        topicDocByStr = [(self._docDict[i], vPrimeTopic[i])
+                           for i in numpy.where(vPrimeTopic>cutoff)[0]
+                          ]
+        topicDocByStr.sort(key=lambda x: (x[1]), reverse=True)
+        return topicDocByStr
+
 
     def getRelatedTerms(self,token,numTerms,tokens_only=True):
         uP = self._getUprime()
